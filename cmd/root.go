@@ -18,7 +18,3 @@ func Execute(version string) {
 		os.Exit(1)
 	}
 }
-
-func init() {
-
-}

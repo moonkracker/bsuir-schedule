@@ -42,3 +42,4 @@ brews:
     folder: Formula
     ids:
       - version_release
+    description: "Get BSUIR schedule"

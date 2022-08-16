@@ -3,8 +3,11 @@ DOCKER_TAG      ?= "v0.0.2"
 GOPATH          := $(shell go env GOPATH)
 GRC             := $(shell which grc)
 
-test:
-	@$(GRC) go test -v ./...
+vet:
+	@$(GRC) go vet ./...
+
+test: format vet
+	@$(GRC) go test -v -cover -coverprofile=.coverprofile ./...
 
 build:
 	@go build -ldflags "-X main.Version=$(DOCKER_TAG)" -o ./bin/$(APP_NAME)

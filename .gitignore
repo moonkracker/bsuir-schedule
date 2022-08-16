@@ -19,3 +19,5 @@ dist/
 
 # VsCode cache
 .vscode/
+
+.coverprofile
