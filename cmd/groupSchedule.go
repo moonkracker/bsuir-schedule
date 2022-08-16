@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/dshipenok/gomorphos/russian/noun"
+	"github.com/dshipenok/gomorphos/str"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"github.com/dshipenok/gomorphos/str"
-	"github.com/dshipenok/gomorphos/russian/noun"
 
 	"bsuir-schedule/controllers/bsuir"
 	"bsuir-schedule/helpers"

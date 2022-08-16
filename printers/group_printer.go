@@ -24,13 +24,6 @@ func getTeacherName(teacher structures.Employees) string {
 	return ""
 }
 
-func getTeacherPicture(teacher structures.Employees) string {
-	for _, v := range teacher {
-		return v.PhotoLink
-	}
-	return ""
-}
-
 func getSubgroup(subgroup int) string {
 	if subgroup == 0 {
 		return "Общая"

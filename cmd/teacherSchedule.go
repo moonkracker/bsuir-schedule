@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/spf13/cobra"
-	"github.com/dshipenok/gomorphos/str"
 	"github.com/dshipenok/gomorphos/russian/noun"
+	"github.com/dshipenok/gomorphos/str"
+	"github.com/spf13/cobra"
 
 	"bsuir-schedule/controllers/bsuir"
 	"bsuir-schedule/helpers"
-	"bsuir-schedule/printers"
 	"bsuir-schedule/image"
+	"bsuir-schedule/printers"
 )
 
 var (

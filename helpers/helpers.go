@@ -103,3 +103,9 @@ func IsEmptyTeacherWeek(weeknumber int32, data map[string]structures.APIDay) boo
 	}
 	return cnt == 0
 }
+
+func ErrHandler(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
