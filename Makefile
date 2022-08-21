@@ -1,5 +1,5 @@
 APP_NAME        = "bsuir-schedule"
-DOCKER_TAG      ?= "v0.0.3"
+DOCKER_TAG      ?= "v0.0.4"
 GOPATH          := $(shell go env GOPATH)
 GRC             := $(shell which grc)
 
