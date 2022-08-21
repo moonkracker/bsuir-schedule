@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_widthAndHeight(t *testing.T) {
+func TestWidthAndHeight(t *testing.T) {
 	tests := []struct {
 		name   string
 		size   string

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_GetLessonColor(t *testing.T) {
+func TestGetLessonColor(t *testing.T) {
 	tests := []struct {
 		name       string
 		want_color text.Color
