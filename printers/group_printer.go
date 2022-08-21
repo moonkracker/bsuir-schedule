@@ -32,6 +32,8 @@ func getSubgroup(subgroup int) string {
 }
 
 func (sp *SchedulePrinter) WriteGroupDay(weeknumber int32, SubgroupsNumber []int32, data structures.APIDay) {
+	pairNumber := 0
+	var previousLessonTime, currentLessonTime string
 	for _, v := range data {
 		if !helpers.Int32SliceContains(v.WeekNumber, weeknumber) {
 			continue
@@ -39,9 +41,15 @@ func (sp *SchedulePrinter) WriteGroupDay(weeknumber int32, SubgroupsNumber []int
 		if !helpers.Int32SliceContains(SubgroupsNumber, int32(v.NumSubgroup)) {
 			continue
 		}
+		currentLessonTime = v.StartLessonTime + "-" + v.EndLessonTime
+		if currentLessonTime != previousLessonTime {
+			previousLessonTime = currentLessonTime
+			pairNumber += 1
+		}
 		sp.table.AppendRow(table.Row{
+			pairNumber,
 			helpers.GetLessonColor(v.LessonTypeAbbrev).Sprintf(v.LessonTypeAbbrev),
-			v.StartLessonTime + "-" + v.EndLessonTime,
+			currentLessonTime,
 			v.Subject,
 			getLessonAuditorie(v.Auditories),
 			getTeacherName(v.Employees),
@@ -52,10 +60,10 @@ func (sp *SchedulePrinter) WriteGroupDay(weeknumber int32, SubgroupsNumber []int
 
 func NewGroupPrinter() *SchedulePrinter {
 	t := table.NewWriter()
-	t.AppendHeader(table.Row{"Тип", "Время", "Предмет", "Аудитория", "Преподаватель", "Подгруппа"})
+	t.AppendHeader(table.Row{"№", "Тип", "Время", "Предмет", "Аудитория", "Преподаватель", "Подгруппа"})
 	t.SetStyle(table.StyleLight)
-	t.SetAutoIndex(true)
 	t.SetColumnConfigs([]table.ColumnConfig{
+		NumberField,
 		TypeField,
 		TimeField,
 		SubjectField,
@@ -64,6 +72,7 @@ func NewGroupPrinter() *SchedulePrinter {
 		SubgroupField,
 	})
 	t.Style().Options.SeparateRows = true
+	t.SuppressEmptyColumns()
 	t.SetOutputMirror(os.Stdout)
 	return &SchedulePrinter{
 		table: t,

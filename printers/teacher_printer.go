@@ -1,7 +1,6 @@
 package printers
 
 import (
-	// "fmt"
 	"os"
 
 	"bsuir-schedule/helpers"
@@ -11,14 +10,22 @@ import (
 )
 
 func (sp *SchedulePrinter) WriteTeacherDay(weeknumber int32, data structures.APIDay) {
+	pairNumber := 0
+	var previousLessonTime, currentLessonTime string
 	for _, v := range data {
 		if !helpers.Int32SliceContains(v.WeekNumber, weeknumber) {
 			continue
 		}
 		for group, speciality := range getGroupsAndSpecialityMap(v.StudentGroups) {
+			currentLessonTime = v.StartLessonTime + "-" + v.EndLessonTime
+			if currentLessonTime != previousLessonTime {
+				previousLessonTime = currentLessonTime
+				pairNumber += 1
+			}
 			sp.table.AppendRow(table.Row{
+				pairNumber,
 				helpers.GetLessonColor(v.LessonTypeAbbrev).Sprintf(v.LessonTypeAbbrev),
-				v.StartLessonTime + "-" + v.EndLessonTime,
+				currentLessonTime,
 				v.Subject,
 				getLessonAuditorie(v.Auditories),
 				group,
@@ -38,10 +45,10 @@ func getGroupsAndSpecialityMap(groups structures.StudentGroups) map[string]strin
 
 func NewTeacherPrinter() *SchedulePrinter {
 	t := table.NewWriter()
-	t.AppendHeader(table.Row{"Тип", "Время", "Предмет", "Аудитория", "Группы", "Специальность"})
+	t.AppendHeader(table.Row{"№", "Тип", "Время", "Предмет", "Аудитория", "Группы", "Специальность"})
 	t.SetStyle(table.StyleLight)
-	t.SetAutoIndex(true)
 	t.SetColumnConfigs([]table.ColumnConfig{
+		NumberField,
 		TypeField,
 		TimeField,
 		SubjectField,
@@ -50,6 +57,7 @@ func NewTeacherPrinter() *SchedulePrinter {
 		SpecialityField,
 	})
 	t.Style().Options.SeparateRows = true
+	t.SuppressEmptyColumns()
 	t.SetOutputMirror(os.Stdout)
 	return &SchedulePrinter{
 		table: t,

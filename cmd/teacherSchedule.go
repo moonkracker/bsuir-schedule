@@ -49,7 +49,6 @@ func RunTeachersSchedule(cmd *cobra.Command, args []string) {
 		fmt.Println("Teacher not found")
 		return
 	}
-
 	if TeacherAllWeekNumbers {
 		TeacherWeekNumbers = []int32{1, 2, 3, 4}
 	}
