@@ -2,23 +2,19 @@ package image
 
 import (
 	"encoding/base64"
-	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 )
 
 var (
-	width               = flag.String("width", "200px", "width (e.g. 100px, 10%, or auto)")
-	height              = flag.String("height", "200px", "height (e.g. 100px, 10%, or auto)")
-	size                = flag.String("size", "", "width,height in pixels (e.g. 1024px,768px or 3,3)")
-	preserveAspectRatio = flag.Bool("p", false, "preserve aspect ratio")
+	size                = "200px,200px" // width,height in pixels (e.g. 1024px,768px or 3,3)
+	preserveAspectRatio = false         // preserve aspect ratio
 )
 
+// Print image in terminal from url
 func DisplayNetPicture(filename string) {
 	res, err := http.Get(filename)
 	if err != nil {
@@ -31,25 +27,13 @@ func DisplayNetPicture(filename string) {
 	}
 }
 
-func displayLocalPicture(filename string) {
-	f, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	if err := display(f); err != nil {
-		log.Fatal(err)
-	}
-}
-
 func display(r io.Reader) error {
-	data, err := ioutil.ReadAll(r)
+	data, err := io.ReadAll(r)
 	if err != nil {
 		return err
 	}
 
-	width, height := widthAndHeight()
+	width, height := widthAndHeight(size)
 
 	fmt.Print("\033]1337;")
 	fmt.Printf("File=inline=1")
@@ -61,7 +45,7 @@ func display(r io.Reader) error {
 			fmt.Printf(";height=%s", height)
 		}
 	}
-	if *preserveAspectRatio {
+	if preserveAspectRatio {
 		fmt.Print("preserveAspectRatio=1")
 	}
 	fmt.Print(":")
@@ -71,15 +55,9 @@ func display(r io.Reader) error {
 	return nil
 }
 
-func widthAndHeight() (w, h string) {
-	if *width != "" {
-		w = *width
-	}
-	if *height != "" {
-		h = *height
-	}
-	if *size != "" {
-		sp := strings.SplitN(*size, ",", -1)
+func widthAndHeight(size string) (w, h string) {
+	if size != "" {
+		sp := strings.SplitN(size, ",", -1)
 		if len(sp) == 2 {
 			w = sp[0]
 			h = sp[1]

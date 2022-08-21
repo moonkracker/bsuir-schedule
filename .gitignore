@@ -21,3 +21,5 @@ dist/
 .vscode/
 
 .coverprofile
+
+lcov.info

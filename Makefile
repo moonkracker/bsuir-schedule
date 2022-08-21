@@ -1,5 +1,5 @@
 APP_NAME        = "bsuir-schedule"
-DOCKER_TAG      ?= "v0.0.2"
+DOCKER_TAG      ?= "v0.0.3"
 GOPATH          := $(shell go env GOPATH)
 GRC             := $(shell which grc)
 
@@ -7,17 +7,14 @@ vet:
 	@$(GRC) go vet ./...
 
 test: format vet
-	@$(GRC) go test -v -cover -coverprofile=.coverprofile ./...
+	@$(GRC) go test -v ./...
 
-build:
+build: format 
 	@go build -ldflags "-X main.Version=$(DOCKER_TAG)" -o ./bin/$(APP_NAME)
 
-install:
+install: format
 	@go build -ldflags "-X main.Version=$(DOCKER_TAG)" -o ${GOPATH}/bin/$(APP_NAME)
 	@echo "Installed $(APP_NAME) to ${GOPATH}/bin/$(APP_NAME)"
-
-run:
-	@./bin/$(APP_NAME)
 
 format:
 	@go fmt ./...

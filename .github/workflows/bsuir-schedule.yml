@@ -12,6 +12,11 @@ env:
 jobs:
   build-bsuir-schedule:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go:
+          - '1.19'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -61,6 +66,11 @@ jobs:
           build-args: VERSION_TAG=${{ steps.vars.outputs.tag }}
   coverals:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go:
+          - '1.19'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -68,7 +78,10 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
-      - name: Coveralls
+      - name: Run tests
+        run: go test -v -coverprofile=./lcov.info ./...
+      - name: Push to Coveralls
         uses: coverallsapp/github-action@master
         with:
+          path-to-lcov: ./lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
